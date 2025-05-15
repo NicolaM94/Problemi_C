@@ -89,12 +89,6 @@ int main () {
     } while (input != 0);
     
 
-
-
-
-
-
-
     // Libera la memoria!
     free(mem_p);
 
