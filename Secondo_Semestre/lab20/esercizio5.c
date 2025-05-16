@@ -42,8 +42,15 @@ int addllnode (struct node *current, int value) {
 }
 
 struct node * removeEvenNodes (struct node *current) {
-    while (current -> next != NULL) {
-        if
+    struct node *tmp;
+    while (current != NULL) {
+        if (current -> value % 2 == 0) {
+            tmp = current;
+            current = current -> next;
+            free(tmp);
+        } else {
+            while ()
+        }
     }
 }
 
@@ -59,4 +66,6 @@ int main () {
     addllnode(&a, 3);
     addllnode(&a, 9);
     llprint(&a);
+    removeEvenNodes(&a);
+
 }
