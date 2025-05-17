@@ -15,57 +15,68 @@ Realizzare anche la funzione per stampare la lista.*/
 #include <stdio.h>
 #include <stdlib.h>
 
-
 struct node {
     int value;
     struct node *next;
 };
 
-void llprint(struct node *current) {
-    while (current != NULL) {
-        printf("%d ", (*current).value);
-        current = current -> next;
+void printList (struct node *root) {
+    while (root != NULL) {
+        printf("%d ", root -> value);
+        root = root -> next;
     }
     printf("\n");
 }
 
-int addllnode (struct node *current, int value) {
-    struct node *new;
-    while (current -> next  != NULL) {
-        current = current -> next;
-    }
+struct node * removeEvenNodes (struct node *root) {
 
-    new = (struct node *) malloc(sizeof(struct node *));
-    new -> value = value;
-    new -> next  = NULL;
-    current -> next = new;
-}
-
-struct node * removeEvenNodes (struct node *current) {
-    struct node *tmp;
-    while (current != NULL) {
-        if (current -> value % 2 == 0) {
-            tmp = current;
-            current = current -> next;
-            free(tmp);
+    struct node *tempHead = NULL;
+    struct node *tempBin = NULL;
+        
+    tempHead = root;
+    while (root -> next != NULL) {
+        if (root -> next -> value %2 == 0) {
+            tempBin = root -> next;
+            root -> next = root -> next -> next;
+            free(tempBin);
         } else {
-            while ()
+            root = root -> next;
         }
     }
+    if (tempHead -> value % 2 == 0) {
+        tempHead = tempHead -> next;
+    }
+    return tempHead;
+}
+
+void addNode (struct node *head, int value) {
+    
+    struct node *newNode = (struct node *) malloc(sizeof(struct node));
+    newNode -> value = value;
+    newNode -> next = NULL;
+
+    while (head -> next != NULL) {
+        head = head -> next;
+    }
+    head -> next = newNode;    
 }
 
 int main () {
 
-    struct node a;
-    a.value = 4;
-    a.next = NULL;
+    struct node testa;
+    testa.value = 4;
+    testa.next = NULL;
 
-    llprint(&a);
-    addllnode(&a, 6);
-    addllnode(&a, 2);
-    addllnode(&a, 3);
-    addllnode(&a, 9);
-    llprint(&a);
-    removeEvenNodes(&a);
+    printList(&testa);
+
+    addNode(&testa, 6);
+    addNode(&testa, 2);
+    addNode(&testa, 3);
+    addNode(&testa, 9);
+
+    printList(&testa);
+
+    testa = *removeEvenNodes(&testa);
+    printList(&testa);
 
 }

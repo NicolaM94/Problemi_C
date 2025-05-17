@@ -1,11 +1,9 @@
-/*
-
-Sia data una lista contenente almeno due elementi
+/*Sia data una lista contenente almeno due elementi
 ed i cui nodi sono definiti tramite la seguente struttura
 C:
 struct nodo{
-    int valore;
-    struct nodo *next;
+int valore;
+struct nodo *next;
 };
 Si scriva una funzione C che ricevendo in ingresso un
 puntatore alla lista modifichi la stessa, memorizzando
@@ -14,59 +12,74 @@ presenti nella lista.
 Ad esempio, una lista contenente la sequenza di interi
 4 6 2 3 9 verrà modificata dalla funzione nella lista
 24 4 6 2 3 9
-Realizzare anche la funzione per stampare la lista.
-
-*/
+Realizzare anche la funzione per stampare la lista.*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 
 struct Node {
-    int valore;
-    struct Node *next;
+    int value;
+    struct Node * next;
 };
 
-void printLista (struct Node lista) {
-    do {
-        printf("%d ", lista.valore);
-        lista = *(lista.next);
-    } while (lista.next != NULL);
-    printf("%d", lista.valore);
+void printList ( struct Node *head ) {
+
+    while ( head != NULL ) {
+        printf("%d ", head -> value);
+        head = head -> next;
+    }
+    printf("\n");
+
 }
 
-struct Node sommaNodiInTesta (struct Node *node) {
+void appendNode ( struct Node *head, int value ) {
+    
+    struct Node *newlast = (struct Node *) malloc(sizeof(struct Node));
+    newlast -> value = value;
+    newlast -> next = NULL;
 
-    int somma = 0;
-    struct Node *temp  = node;
-    struct Node new;
+    while (head -> next != NULL) {
+        head = head -> next;
+    }
+    head -> next = newlast;
 
-    while (node != NULL) {
-        somma += node -> valore;
-        node = node -> next;
+}
+
+struct Node * sumIntoHead ( struct Node *head ) {
+
+    int sum = 0;
+    struct Node *newHead = (struct Node *) malloc(sizeof(struct Node));
+    struct Node *prevHead = head;
+
+    while (head != NULL) {
+        sum += head -> value;
+        head = head -> next;
     }
 
-    new.valore = somma;
-    new.next = temp;
-    return new;
+    newHead -> value = sum;
+    newHead -> next = prevHead;
+    return newHead;
 }
+
 
 
 int main () {
 
-    struct Node a,b,c, d;
+    struct Node *a;
 
-    a.valore = 10;
-    b.valore = 15;
-    c.valore = 7;
+    a = (struct Node *) malloc(sizeof(struct Node));
+    a -> value = 1;
+    a -> next = NULL;
 
-    a.next = &b;
-    b.next = &c;
-    c.next = NULL;
+    appendNode(a, 2);
+    appendNode(a, 3);
+    appendNode(a, 4);
 
-    printLista(a);
-    d = sommaNodiInTesta(&a);
-    printf("\n");
-    printLista(d);
+    printList(a);
 
+    a = sumIntoHead(a);
+    
+    printList(a);
+    
 }
