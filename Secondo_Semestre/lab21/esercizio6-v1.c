@@ -39,8 +39,8 @@ visualizza, distruggiLista;
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <string.h>
-#define STR_L 8
 
 typedef struct rilevamento_ {
     int piano;
@@ -49,74 +49,41 @@ typedef struct rilevamento_ {
     struct rilevamento_* next; 
 } rilevamento_t;
 
-
-void printList (rilevamento_t *head, int piano) {
-    rilevamento_t *sp;
-    sp = head;
-    head = head -> next;
-    while (head -> next != NULL) {
-        if (head -> piano == piano) {
-            if (head -> temperatura < 23 && sp -> temperatura >= 23) {
-                sp = head;
-            } else if (head -> temperatura >= 23 && sp -> temperatura < 23) {
-                printf("%d %s -> %s\n", head -> piano, sp -> ora, head -> ora);
-            }
-        }
-        head = head -> next;
+void printList (rilevamento_t *root) {
+    while (root != NULL) {
+        printf("%d %s %d\n", root -> piano, root -> ora, root -> temperatura);
+        root =  root -> next;
     }
 }
 
-rilevamento_t * appendList (rilevamento_t *head, rilevamento_t *newNode) {
-    rilevamento_t *temp;
-    if (head == NULL) {
-        return newNode;
+rilevamento_t * addNode (rilevamento_t *root, int piano, char *ora, int temperatura) {
+    rilevamento_t *prevHead = root;
+    if (root == NULL) {
+        root = (rilevamento_t *) malloc(sizeof(rilevamento_t));
+        root -> piano = piano;
+        strcpy(root -> ora, ora);
+        root -> temperatura = temperatura;
+        return root;
     } else {
-        temp = head;
-        while (head -> next != NULL) {
-            head = head -> next;
+        while (root -> next != NULL) {
+            root = root -> next;
         }
-        head -> next = newNode;
+        root -> next = (rilevamento_t *) malloc (sizeof(rilevamento_t));
+        root -> next -> piano = piano;
+        strcpy(root -> next -> ora, ora);
+        root -> next -> temperatura = temperatura;
+        root -> next -> next = NULL;
+        return prevHead;
     }
-    return temp;
 }
+
 
 
 int main () {
 
-    rilevamento_t *listaRilevamenti = NULL;
-    rilevamento_t *tempRelev;
-    int piano, temperatura;
-    char ora [STR_L+1];
-
-    do {
-        puts("Inserisci piano");
-        scanf("%d", &piano);
-        
-        if (piano != -1) {
-
-            puts("Inserisci ora: ");
-            scanf("%s", ora);
-            ora[8] = '\0';
-            puts("Inserisci temperatura");
-            scanf("%d", &temperatura);
-
-            tempRelev = (rilevamento_t *) malloc(sizeof(rilevamento_t));
-            if (tempRelev == NULL) {
-                perror("Malloc non riuscito: ");
-                exit(-1);
-            }
-            tempRelev -> piano = piano;
-            strcpy(tempRelev -> ora, ora);
-            tempRelev -> temperatura = temperatura;
-
-            listaRilevamenti = appendList(listaRilevamenti, tempRelev);
-        }
-    } while (piano != -1);
-
-    printf("\n\n");
-    puts("Inserisci il piano da visualizzare: ");
-    scanf("%d", &piano);
-
-    printList(listaRilevamenti, piano);
+    rilevamento_t *head = NULL;
+    int floor;
+    int temp;
+    char *orario[]
 
 }
