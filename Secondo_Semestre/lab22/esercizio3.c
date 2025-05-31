@@ -23,88 +23,86 @@ NOTA: Lo studente NON deve gestire la deallocazione della lista. */
 #include <errno.h>
 
 typedef struct node {
-    char letter;
+    char value;
     struct node *next;
 } node_t;
 
-int isVocale (char l) {
-    char array[10] = {'A','E','I','O','U','a','e','i','o','u'};
-    int i;
-
-    for (i = 0; i < 10; i++) {
-        if (l == array[i]) {
-            return 1;
-        }
+int isvocale (char l) {
+    if (l == 'a' || l == 'e' || l == 'i' || l == 'o' || l == 'u') {
+        return 1;
     }
     return 0;
 }
 
-void stampa_lista (node_t *head) {
-    while (head != NULL) {
-        printf("%c", head -> letter);
-        head = head -> next;
+void stampa_lista (node_t *s) {
+    while (s != NULL) {
+        printf("%c", s -> value);
+        s = s -> next;
     }
     printf("\n");
 }
 
-node_t * crea_lista (char parola[]) {
-    node_t *head = NULL;
-    node_t *tail = NULL;
-    node_t *newNode = NULL;
-    int p;
+node_t * aggiungi_nodo (node_t *head, char value) {
 
-    for (p = 0; parola[p] != '\0'; p++) {
-        newNode = (node_t *) malloc(sizeof(node_t));
-        newNode -> letter = parola[p];
-        newNode -> next = NULL;
-        if (head == NULL) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail -> next = newNode;
-            tail = tail -> next;
-        }
+    node_t * newnode;
+    node_t * headref;
+
+    newnode = (node_t *)malloc(sizeof(node_t));
+    newnode -> value = value;
+    newnode -> next = NULL;
+
+    if (head == NULL) {
+        return newnode;
     }
-    return head;
-
+    headref = head;
+    while (head -> next != NULL) {
+        head = head -> next;
+    }
+    head -> next = newnode;
+    return headref;
 }
 
 node_t * raddoppia_vocali (node_t *head) {
 
-    node_t *headref = head;
-    node_t *tmp = NULL;
+    node_t *newnode;
+    node_t *headref;
 
-    while (head != NULL) {
-
-        if (isVocale(head -> letter) == 1) {
-            printf("Triggered %c \n", head -> letter);
-           
-            tmp = head -> next;
-
-            head -> next = (node_t *)malloc(sizeof(node_t));
-            head -> next -> letter = head -> letter;
-            head -> next -> next = tmp;
-            head -> next = tmp;
-
+    headref = head;
+    while (head!= NULL) {
+        if (isvocale(head -> value) == 1) {
+            newnode = (node_t *)malloc(sizeof(node_t));
+            newnode -> value = head -> value;
+            newnode -> next = head -> next;
+            head -> next = newnode;
+            head = head -> next -> next;
         } else {
             head = head -> next;
         }
-        
     }
-
     return headref;
 }
 
+
+
+
 int main () {
 
-    node_t *lista;
-    char parola[] = "mammalucco";
-    lista = crea_lista(parola);
+    node_t *head = NULL;
+    char stringa[] = "la mia stringa";
+    int i;
 
-    stampa_lista(lista);
+    for (i = 0; stringa[i] != '\0'; i++) {
+        head = aggiungi_nodo(head, stringa[i]);
+        
+    }
 
-    lista = raddoppia_vocali(lista);
+    stampa_lista(head);
 
-    stampa_lista(lista);
+    head = raddoppia_vocali(head);
+
+    stampa_lista(head);
+
+    
+
 
 }
