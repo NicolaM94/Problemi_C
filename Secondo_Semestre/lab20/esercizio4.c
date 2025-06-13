@@ -57,7 +57,6 @@ struct nodo * modificaLista (struct nodo *current) {
         modificaLista(current -> next);
         current -> next -> valore = current -> next -> valore * current -> valore;
     }
-
 }
 
 int main () {
